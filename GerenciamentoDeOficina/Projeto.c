@@ -54,30 +54,22 @@ void pausarSistema() {
     getchar();
 }
 
-/**
- * Le uma string do stdin com seguranca.
- * Retorna 1 se a leitura foi OK.
- * Retorna 0 se a entrada foi longa demais (overflow).
- */
 int lerString(char* buffer, int tamanho) {
     if (fgets(buffer, tamanho, stdin) == NULL) {
         buffer[0] = '\0';
-        return 1; // Trata EOF como string vazia
+        return 1; 
     }
 
     size_t len = strlen(buffer);
 
     if (len > 0 && buffer[len - 1] == '\n') {
-        // Caso ideal: string lida + \n
         buffer[len - 1] = '\0';
-        return 1; // Sucesso
+        return 1; 
     } else if (len == (size_t)tamanho - 1) {
-        // Caso de overflow: buffer cheio e \n nao encontrado
-        limparBuffer(); // Limpa o resto da linha
-        return 0; // Erro (overflow)
+        limparBuffer(); 
+        return 0; 
     } else {
-        // Caso de EOF sem \n no final: buffer nao esta cheio
-        return 1; // Sucesso
+        return 1; 
     }
 }
 
@@ -100,18 +92,14 @@ int validarPlaca(const char* placa) {
     return 1;
 }
 
-/**
- * Valida se a string contem apenas letras e espacos.
- * Retorna 1 se for valido, 0 caso contrario.
- */
 int validarNome(const char* nome) {
     if (strlen(nome) == 0) return 0;
     for (int i = 0; nome[i] != '\0'; i++) {
         if (!isalpha(nome[i]) && !isspace(nome[i])) {
-            return 0; // Encontrou um caractere invalido
+            return 0;
         }
     }
-    return 1; // Todos os caracteres sao validos
+    return 1;
 }
 
 
@@ -220,11 +208,11 @@ void cadastrarCliente(Cliente** clientes, int* totalClientes) {
     limparTela();
     printf("--- Cadastro de Cliente ---\n");
     Cliente novoCliente;
-    int overflow; // Flag para controlar loop de entrada
+    int overflow; 
     
     do {
         printf("Nome: ");
-        if (!lerString(novoCliente.nome, 101)) { // 99 chars + \n + \0
+        if (!lerString(novoCliente.nome, 101)) {
             printf("ERRO: Nome muito longo. Maximo de 99 caracteres.\n");
             overflow = 1;
         } else {
@@ -239,7 +227,7 @@ void cadastrarCliente(Cliente** clientes, int* totalClientes) {
 
     do {
         printf("CPF (11 digitos, sem pontos): ");
-        if (!lerString(novoCliente.cpf, 13)) { // 11 chars + \n + \0
+        if (!lerString(novoCliente.cpf, 13)) { 
             printf("ERRO: CPF muito longo. Maximo de 11 caracteres.\n");
             overflow = 1;
         } else {
@@ -256,7 +244,7 @@ void cadastrarCliente(Cliente** clientes, int* totalClientes) {
     
     do {
         printf("Telefone: ");
-        if (!lerString(novoCliente.telefone, 16)) { // 14 chars + \n + \0
+        if (!lerString(novoCliente.telefone, 16)) {
             printf("ERRO: Telefone muito longo. Maximo de 14 caracteres.\n");
             overflow = 1;
         } else {
@@ -315,10 +303,10 @@ void atualizarCliente(Cliente* clientes, int totalClientes) {
             overflow = 1;
         } else {
             overflow = 0;
-            if (strlen(buffer) > 0) { // So valida se digitou algo
+            if (strlen(buffer) > 0) { 
                 if (!validarNome(buffer)) {
                     printf("ERRO: Nome deve conter apenas letras e espacos.\n");
-                    overflow = 1; // Forca repetir o loop do nome
+                    overflow = 1; 
                 } else {
                     strcpy(clientes[index].nome, buffer);
                 }
@@ -407,7 +395,7 @@ void gerenciarClientes(Cliente** clientes, int* totalClientes, Veiculo* veiculos
         printf("0. Voltar\n");
         printf("Escolha uma opcao: ");
         
-        if (!lerString(buffer, 4)) { // 2 digitos + \n + \0
+        if (!lerString(buffer, 4)) { 
             printf("ERRO: Opcao muito longa.\n");
             overflow = 1;
             opcao = -1;
@@ -463,7 +451,7 @@ void cadastrarVeiculo(Veiculo** veiculos, int* totalVeiculos, Cliente* clientes,
 
     do {
         printf("Placa (formato AAA1234): ");
-        if (!lerString(novoVeiculo.placa, 9)) { // 7 chars + \n + \0
+        if (!lerString(novoVeiculo.placa, 9)) { 
             printf("ERRO: Placa muito longa. Maximo de 7 caracteres.\n");
             overflow = 1;
         } else {
@@ -479,7 +467,7 @@ void cadastrarVeiculo(Veiculo** veiculos, int* totalVeiculos, Cliente* clientes,
 
     do {
         printf("Modelo: ");
-        if (!lerString(novoVeiculo.modelo, 51)) { // 49 chars + \n + \0
+        if (!lerString(novoVeiculo.modelo, 51)) { 
             printf("ERRO: Modelo muito longo. Maximo de 49 caracteres.\n");
             overflow = 1;
         } else {
@@ -491,10 +479,10 @@ void cadastrarVeiculo(Veiculo** veiculos, int* totalVeiculos, Cliente* clientes,
     char anoBuffer[10];
     do {
         printf("Ano: ");
-        if (!lerString(anoBuffer, 6)) { // 4 digitos + \n + \0
+        if (!lerString(anoBuffer, 6)) { 
             printf("ERRO: Ano muito longo. Maximo de 4 digitos.\n");
             overflow = 1;
-            novoVeiculo.ano = 0; // Valor invalido para forcar loop
+            novoVeiculo.ano = 0; 
         } else {
             overflow = 0;
             novoVeiculo.ano = atoi(anoBuffer);
@@ -717,7 +705,7 @@ void abrirOrdemServico(OrdemServico** ordens, int* totalOrdens, Veiculo* veiculo
 
     do {
         printf("Data de Entrada (DD/MM/AAAA): ");
-        if (!lerString(novaOrdem.data_entrada, 12)) { // 10 chars + \n + \0
+        if (!lerString(novaOrdem.data_entrada, 12)) { 
             printf("ERRO: Data muito longa. Maximo de 10 caracteres.\n");
             overflow = 1;
         } else {
@@ -727,7 +715,7 @@ void abrirOrdemServico(OrdemServico** ordens, int* totalOrdens, Veiculo* veiculo
 
     do {
         printf("Descricao do Problema: ");
-         if (!lerString(novaOrdem.descricao_problema, 201)) { // 199 chars + \n + \0
+         if (!lerString(novaOrdem.descricao_problema, 201)) { 
             printf("ERRO: Descricao muito longa. Maximo de 199 caracteres.\n");
             overflow = 1;
         } else {
@@ -759,11 +747,11 @@ void atualizarOrdemServico(OrdemServico* ordens, int totalOrdens) {
         printf("Nenhuma ordem de servico cadastrada.\n");
         pausarSistema(); return;
     }
-    char idBuffer[11]; // Aumentado para 11
+    char idBuffer[11]; 
     int overflow;
     do {
         printf("Digite o ID da Ordem de Servico: ");
-        if (!lerString(idBuffer, 11)) { // 10 digitos + \n + \0
+        if (!lerString(idBuffer, 11)) { 
             printf("ERRO: ID muito longo.\n");
             overflow = 1;
         } else {
@@ -1120,4 +1108,5 @@ void menuPrincipal() {
 int main() {
     menuPrincipal();
     return 0;
+
 }
